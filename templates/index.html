@@ -1,4 +1,5 @@
-$def with (reglas)
+{% extends "base.html" %}
+{% block contenido %}
 
 <div class="contenedor">
     <h1>Productos del Supermercado (Aurrera)</h1>
@@ -11,8 +12,9 @@ $def with (reglas)
         <div class="campo">
             <label for="criterio">1. Ordenar / buscar por:</label>
             <select name="criterio" id="criterio" onchange="actualizarOpciones()">
-                $for clave, etiqueta in reglas.items():
-                    <option value="$clave">$etiqueta</option>
+                {% for clave, etiqueta in reglas.items() %}
+                <option value="{{ clave }}">{{ etiqueta }}</option>
+                {% endfor %}
             </select>
         </div>
 
@@ -20,9 +22,11 @@ $def with (reglas)
             <label for="subcriterio">2. Dentro de cada categoria, ordenar tambien por:</label>
             <select name="subcriterio" id="subcriterio">
                 <option value="">(sin regla secundaria)</option>
-                $for clave, etiqueta in reglas.items():
-                    $if clave != "categoria":
-                        <option value="$clave">$etiqueta</option>
+                {% for clave, etiqueta in reglas.items() %}
+                    {% if clave != "categoria" %}
+                    <option value="{{ clave }}">{{ etiqueta }}</option>
+                    {% endif %}
+                {% endfor %}
             </select>
         </div>
 
@@ -31,8 +35,7 @@ $def with (reglas)
             <div class="fila-precio">
                 <div>
                     <label for="precio_exacto">Precio exacto</label>
-                    <input type="number" step="0.01" name="precio_exacto" id="precio_exacto"
-                           placeholder="ej. 200">
+                    <input type="number" step="0.01" name="precio_exacto" id="precio_exacto" placeholder="ej. 200">
                 </div>
                 <span class="o">o un rango:</span>
                 <div>
@@ -53,10 +56,9 @@ $def with (reglas)
 <script>
 function actualizarOpciones() {
     var criterio = document.getElementById("criterio").value;
-    document.getElementById("opcion-subcriterio").style.display =
-        (criterio === "categoria") ? "block" : "none";
-    document.getElementById("opcion-precio").style.display =
-        (criterio === "precio") ? "block" : "none";
+    document.getElementById("opcion-subcriterio").style.display = (criterio === "categoria") ? "block" : "none";
+    document.getElementById("opcion-precio").style.display = (criterio === "precio") ? "block" : "none";
 }
 actualizarOpciones();
 </script>
+{% endblock %}
