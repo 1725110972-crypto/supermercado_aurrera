@@ -4,18 +4,40 @@
 <div class="contenedor">
     <h1>Productos del Supermercado (Aurrera)</h1>
     <p class="subtitulo">
+        {% if busqueda %}
+        Resultados para "<strong>{{ busqueda }}</strong>", ordenados por:
+        <strong>{{ reglas.get(criterio, criterio) }}</strong>
+        {% else %}
         Lista ordenada por: <strong>{{ reglas.get(criterio, criterio) }}</strong>
+        {% endif %}
         &mdash; {{ productos|length }} producto(s) encontrado(s)
     </p>
 
     <a class="volver" href="/">&larr; Cambiar regla de busqueda</a>
 
+    <form action="/lista" method="get" class="reordenar">
+        <input type="hidden" name="q" value="{{ busqueda }}">
+        <label for="criterio-lista">Ordenar estos resultados por:</label>
+        <select name="criterio" id="criterio-lista">
+            {% for clave, etiqueta in reglas.items() %}
+            <option value="{{ clave }}" {% if clave == criterio %}selected{% endif %}>{{ etiqueta }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Aplicar</button>
+    </form>
+
     <table class="tabla-productos">
         <thead>
             <tr>
-                <th>#</th><th>Categoria</th><th>Nombre del producto</th><th>Precio</th>
-                <th>Fecha de caducidad</th><th>Unidad de medida</th>
-                <th>Cantidad en inventario</th><th>Marca</th><th>Codigo de barras</th>
+                <th>#</th>
+                <th>Categoria</th>
+                <th>Nombre del producto</th>
+                <th>Precio</th>
+                <th>Fecha de caducidad</th>
+                <th>Unidad de medida</th>
+                <th>Cantidad en inventario</th>
+                <th>Marca</th>
+                <th>Codigo de barras</th>
             </tr>
         </thead>
         <tbody>

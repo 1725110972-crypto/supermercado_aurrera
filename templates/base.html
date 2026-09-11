@@ -6,6 +6,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
+    <header class="barra-aurrera">
+        <div class="barra-aurrera-contenido">
+            <a href="/" class="logo-aurrera">
+                <span class="logo-bodega">Bodega</span><span class="logo-aurrera-texto">Aurrera</span>
+            </a>
+            <form action="/lista" method="get" class="buscador">
+                <input type="text" name="q" placeholder="Buscar producto, marca o categoria..." value="{{ request.args.get('q', '') }}">
+                <button type="submit" aria-label="Buscar">🔍</button>
+            </form>
+        </div>
+        <div class="franja-colores">
+            <span class="franja-amarilla"></span>
+            <span class="franja-roja"></span>
+        </div>
+    </header>
+
     {% block contenido %}{% endblock %}
 </body>
 </html>

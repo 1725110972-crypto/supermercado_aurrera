@@ -41,6 +41,25 @@ def obtener_productos():
     return [dict(fila) for fila in filas]
 
 
+def buscar_productos(texto):
+    """
+    Busca productos cuyo nombre, marca o categoria contengan 'texto'
+    (busqueda simple tipo 'como el buscador de la tienda').
+    """
+    conexion = obtener_conexion()
+    cursor = conexion.cursor()
+    patron = f"%{texto}%"
+    cursor.execute("""
+        SELECT * FROM productos
+        WHERE nombre LIKE ? COLLATE NOCASE
+           OR marca LIKE ? COLLATE NOCASE
+           OR categoria LIKE ? COLLATE NOCASE
+    """, (patron, patron, patron))
+    filas = cursor.fetchall()
+    conexion.close()
+    return [dict(fila) for fila in filas]
+
+
 def contar_productos():
     conexion = obtener_conexion()
     cursor = conexion.cursor()

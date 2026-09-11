@@ -7,7 +7,7 @@ Base de datos: SQLite3
 """
 from flask import Flask, render_template, request
 
-from db.database import crear_tabla, obtener_productos
+from db.database import crear_tabla, obtener_productos, buscar_productos
 from db.seed_data import poblar_base_de_datos
 from tda.lista_ordenada import ListaOrdenada
 
@@ -48,8 +48,13 @@ def lista():
     precio_min = request.args.get("precio_min", "")
     precio_max = request.args.get("precio_max", "")
     precio_exacto = request.args.get("precio_exacto", "")
+    busqueda = request.args.get("q", "").strip()
 
-    productos = obtener_productos()
+    if busqueda:
+        productos = buscar_productos(busqueda)
+    else:
+        productos = obtener_productos()
+
     clave = construir_clave(criterio, subcriterio)
 
     lista_ordenada = ListaOrdenada(clave)
@@ -63,7 +68,9 @@ def lista():
     elif criterio == "precio" and precio_min and precio_max:
         resultado = lista_ordenada.buscar_por_rango(float(precio_min), float(precio_max))
 
-    return render_template("lista.html", productos=resultado, criterio=criterio, reglas=REGLAS)
+    return render_template(
+        "lista.html", productos=resultado, criterio=criterio, reglas=REGLAS, busqueda=busqueda
+    )
 
 
 if __name__ == "__main__":
